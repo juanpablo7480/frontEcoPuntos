@@ -1,18 +1,21 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity, Image } from 'react-native';
 import { Button, TextInput, Appbar, Title } from 'react-native-paper';
+import AppBar from '../appbar/appbar';
 import Add from '../add/add';
 import UpdateStatus from '../updateStatus/updateStatus';
+import Pieces from '../pieces/pieces';
 import {createStackNavigato, createAppContainer} from 'react-navigation';
 
 export default class Home extends Component {
+  state={
+    subtitle_view: 'Home'
+  }
   static navigationOptions = {header:null};
   render() {
     return (
       <View style = {styles.container}>
-        <Appbar.Header style = {styles.header}>
-          <Appbar.Content title = "Eco Puntos" titleStyle = {{fontSize:32, textAlign:'center'}}/>
-        </Appbar.Header>
+        <AppBar subtitle_view = {this.state.subtitle_view}></AppBar>
         <View style = {styles.helper}>
         </View>
         <Title style = {styles.title}>¿Qué desea hacer?</Title>
@@ -26,24 +29,23 @@ export default class Home extends Component {
             <Text style = {{textAlign:'center'}}>Actualizar estado</Text>
           </TouchableOpacity>
         </View>
-        <View style = {styles.actions2}>
+        <View style = {styles.actions}>
           <TouchableOpacity style = {styles.button} onPress = {() => {alert("No implementado")}}>
             <Image source = {require("../../assets/placeholder.png")} style = {styles.image} />
             <Text style = {{textAlign: 'center'}}>centros de acopio</Text>
           </TouchableOpacity>
+          <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('Pieces')}>
+            <Image source = {require("../../assets/recycle-bin.png")} style = {styles.image} />
+            <Text style = {{textAlign: 'center'}}>Partes</Text>
+          </TouchableOpacity>
         </View>
+
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  header: {
-    backgroundColor: "#009688",
-    height: 130,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   title:{
     marginTop: 30,
     marginBottom: 50,
