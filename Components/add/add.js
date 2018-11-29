@@ -30,6 +30,7 @@ static navigationOptions = {header:null};
       type_desc_raee: '',
       desc: '',
       subtitle_view: 'agregar producto',
+      message: '',
     //raees:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
     //types:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
       raees: [
@@ -111,8 +112,9 @@ static navigationOptions = {header:null};
 
     getIDResidue(){
       var currentDate = new Date();
-      var string_location = this.state.location.latitude+","+this.state.location.longitude;
-      var aux_id_residue = (this.state.raee[0]+this.state.raee[1]+this.state.raee[2]).toUpperCase() + this.state.type_desc_raee + currentDate.getDate()+ currentDate.getMonth()+currentDate.getFullYear();
+      var aux_random = Math.floor((Math.random()*100) + 1);
+      var string_location = this.state.location.coords.latitude+","+this.state.location.coords.longitude;
+      var aux_id_residue = (this.state.raee[0]+this.state.raee[1]+this.state.raee[2]).toUpperCase() + this.state.type_desc_raee + currentDate.getDate()+ currentDate.getMonth()+currentDate.getFullYear()+aux_random.toString();
       console.log(aux_id_residue);
       if(!this.validRut()){
           this.setState({is_valid_rut: true});
@@ -120,15 +122,13 @@ static navigationOptions = {header:null};
       }
       else{
           this.setState({is_valid_rut: false});
-          fetch('ruta',{
+          fetch('http://159.65.125.29:8015/products/',{
             method: 'POST',
             headers:{
               Accept: 'application/json',
               'Content-Type': 'application/json',
             },
             body:JSON.stringify({
-              'action':'create',
-              'residuo':{
                 'code':aux_id_residue,
                 'estados':[{'paso':'En camino a centro de acopio','gps':string_location}],
                 'final':false,
@@ -136,10 +136,13 @@ static navigationOptions = {header:null};
                 'raws':[],
                 'residuo':this.state.raee,
                 'rut':this.state.rut
-              }
-            }),
-          });
-        this._showDialog();
+            })
+          }).then((response) => {
+                  if(response.status === 200)
+                    this.setState({message: 'El producto fue agregado exitosamente'}, () => this._showDialog());
+                  else
+                    this.setState({message: 'El producto no pudo ser agregado'}, () => this._showDialog());
+                })
         //queda pendiente respuesta de api para mostrar respuesta
 
       }
@@ -156,7 +159,7 @@ static navigationOptions = {header:null};
             onDismiss = {this._hideDialog}>
             <Dialog.Title>Aviso</Dialog.Title>
             <Dialog.Content>
-              <Paragraph>El residuo fue agregado exitosamente!!</Paragraph>
+              <Paragraph>{this.state.message}</Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
               <Button color =  "#009688" onPress = {this._hideDialog}>Aceptar</Button>
