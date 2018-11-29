@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Picker } from 'react-native';
 import { Button, TextInput, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { Constants, Location, Permissions} from 'expo';
+import Spinner from 'react-native-loading-spinner-overlay';
 import AppBar from '../appbar/appbar';
 
 
@@ -17,6 +18,7 @@ static navigationOptions = {header:null};
   }
     state = {
       dialog_visible: false,
+      spinner: false,
       location:null,
       errorMessage:null,
       is_valid_rut: false,
@@ -139,12 +141,10 @@ static navigationOptions = {header:null};
             })
           }).then((response) => {
                   if(response.status === 200)
-                    this.setState({message: 'El producto fue agregado exitosamente'}, () => this._showDialog());
+                    this.setState({spinner: false, message: 'El producto fue agregado exitosamente'}, () => this._showDialog());
                   else
-                    this.setState({message: 'El producto no pudo ser agregado'}, () => this._showDialog());
+                    this.setState({spinner: false, message: 'El producto no pudo ser agregado'}, () => this._showDialog());
                 })
-        //queda pendiente respuesta de api para mostrar respuesta
-
       }
 
     }
@@ -153,6 +153,11 @@ static navigationOptions = {header:null};
     return(
       <View style={styles.container}>
         <AppBar subtitle_view = {this.state.subtitle_view}></AppBar>
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Guardando residuo...'}
+            textStyle={styles.spinnerTextStyle}
+          />
         <Portal>
           <Dialog
             visible = {this.state.visible}
@@ -219,7 +224,9 @@ const styles = StyleSheet.create({
   button:{
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
-
+    marginTop: 40
+  },
+  spinnerTextStyle: {
+    color: '#009688'
   }
 });
