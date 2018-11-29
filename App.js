@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import {Provider as PaperProvider} from 'react-native-paper';
 import Add from './Components/add/add';
 import UpdateStatus from './Components/updateStatus/updateStatus';
 import Home from './Components/home/home';
@@ -24,6 +25,10 @@ const AppContainer = createAppContainer(RootStack);
 
 export default class App extends Component{
   render(){
-    return <AppContainer />
+    return (
+      <PaperProvider>
+        <AppContainer />
+      </PaperProvider>
+    );
   }
 }
