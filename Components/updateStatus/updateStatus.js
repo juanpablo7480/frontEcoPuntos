@@ -21,6 +21,8 @@ static navigationOptions = {header:null};
     new_coordinates: '1,1',
     subtitle_view: 'Actualizar estado',
     residue_state: 'Estado actual de residuo',
+    residue_rut:'',
+    residue_name:'',
     text_content_loading_spinner: 'Obteniendo datos...',
     message: '',
     residues:[{code:'',estados:[{gps:'aux',paso:'aux'}],final:'',owner:'',raws:[],residuo:'',rut:''}]
@@ -40,9 +42,11 @@ static navigationOptions = {header:null};
 
   getResidueState(i){
     if(i >= 0)
-      this.setState({residue_state:this.state.residues[i].estados[(this.state.residues[i].estados.length)-1].paso})
+      this.setState({residue_state:this.state.residues[i].estados[(this.state.residues[i].estados.length)-1].paso,
+    residue_name:this.state.residues[i].residuo,residue_rut:this.state.residues[i].rut})
     else
       this.setState({residue_state: 'Estado actual de residuo'})
+
   }
 
   putResidueState(){
@@ -110,15 +114,17 @@ static navigationOptions = {header:null};
             <Picker.Item key = {index} label = {i.code} value = {i.code} />
           ))}
         </Picker>
-        <TextInput value = {this.state.residue_state} mode = 'outlined' disabled = {true} style = {{marginBottom: 20}}/>
+        <TextInput value = {this.state.residue_state} mode = 'outlined' disabled = {true}/>
+        <TextInput value = {this.state.residue_name} placeholder = 'residuo' mode = 'outlined' disabled = {true}/>
+        <TextInput value = {this.state.residue_rut} placeholder = 'dueño' mode = 'outlined' disabled = {true}  style = {{marginBottom: 20}} />
         <Picker
           selectedValue = {this.state.residue_state_update}
           onValueChange = {(itemValue, itemIndex) => this.setState({residue_state_update: itemValue})}>
           <Picker.Item label = "Seleccione nuevo estado" value = "0" />
           <Picker.Item label = "En camino a centro de acopio" value = "En camino a centro de acopio" />
           <Picker.Item label = "En centro de acopio" value = "En centro de acopio" />
-          <Picker.Item label = "En centro de tratamiento" value = "En centro de tratamiento" />
           <Picker.Item label = "En camino a centro de tratamiento" value = "En camino a centro de tratamiento" />
+          <Picker.Item label = "En centro de tratamiento" value = "En centro de tratamiento" />
           <Picker.Item label = "Finalizado" value = "Finalizado" />
         </Picker>
       </View>
