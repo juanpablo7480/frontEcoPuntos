@@ -71,7 +71,7 @@ export default class pieces extends Component{
   _hideDialog = () => this.setState({visible: false}, () => {this.cleanInputs});
 
   cleanInputs(){
-    this.setState({material1: '', material2: '', material3: '', sku: '"Seleccione residuo'})
+    this.setState({material1: '', material2: '', material3: '', sku: 'Seleccione residuo'})
   }
 
   render(){

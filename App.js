@@ -5,15 +5,22 @@ import Add from './Components/add/add';
 import UpdateStatus from './Components/updateStatus/updateStatus';
 import Home from './Components/home/home';
 import Pieces from './Components/pieces/pieces';
+import Login from './Components/login/login';
+import HomeTransport from './Components/homeTransport/homeTransport';
+import CameraView from './Components/Camera/Camera'
 const RootStack = createStackNavigator(
   {
+    Login : {screen:Login},
     Home:{screen: Home},
     Add:{screen: Add},
     UpdateStatus:{screen: UpdateStatus},
-    Pieces:{screen: Pieces}
+    Pieces:{screen: Pieces},
+    HomeTransport: {screen: HomeTransport},
+    CameraView: {screen: CameraView}
+
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Login',
   },
   {
     navigationOptions:{header:null}

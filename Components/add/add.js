@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Picker } from 'react-native';
 import { Button, TextInput, Dialog, Paragraph, Portal } from 'react-native-paper';
-import { Constants, Location, Permissions} from 'expo';
+import {Camera,Constants, Location, Permissions} from 'expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import AppBar from '../appbar/appbar';
-
+import CameraView from '../Camera/Camera';
+import {createStackNavigato, createAppContainer} from 'react-navigation';
 
 export default class add extends Component{
 static navigationOptions = {header:null};
@@ -150,64 +151,67 @@ static navigationOptions = {header:null};
     }
 
   render(){
-    return(
-      <View style={styles.container}>
-        <AppBar subtitle_view = {this.state.subtitle_view}></AppBar>
-          <Spinner
-            visible={this.state.spinner}
-            textContent={'Guardando residuo...'}
-            textStyle={styles.spinnerTextStyle}
-          />
-        <Portal>
-          <Dialog
-            visible = {this.state.visible}
-            onDismiss = {this._hideDialog}>
-            <Dialog.Title>Aviso</Dialog.Title>
-            <Dialog.Content>
-              <Paragraph>{this.state.message}</Paragraph>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button color =  "#009688" onPress = {this._hideDialog}>Aceptar</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-        <View style = {styles.containerForm}>
-          <TextInput label='RUT' value = {this.state.rut} onChangeText = {rut => this.setState({rut})} underlineColor = "#009688" style = {{backgroundColor:'#ffffff',marginBottom: 5}} error = {this.state.is_valid_rut}/>
-          <Picker
-            selectedValue={this.state.region}
-            onValueChange={(itemValue, itemIndex) => this.setState({region: itemValue})} style = {{marginTop: 10}}>
-            <Picker.Item label = "Seleccione región" value ="0" />
-            <Picker.Item label="Región Metropolitana" value="santiago" />
-            <Picker.Item label="Valparaíso" value="valpo" />
-            </Picker>
+      return(
+        <View style={styles.container}>
+          <AppBar subtitle_view = {this.state.subtitle_view}></AppBar>
+            <Spinner
+              visible={this.state.spinner}
+              textContent={'Guardando residuo...'}
+              textStyle={styles.spinnerTextStyle}
+            />
+          <Portal>
+            <Dialog
+              visible = {this.state.visible}
+              onDismiss = {this._hideDialog}>
+              <Dialog.Title>Aviso</Dialog.Title>
+              <Dialog.Content>
+                <Paragraph>{this.state.message}</Paragraph>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button color =  "#009688" onPress = {this._hideDialog}>Aceptar</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+          <View style = {styles.containerForm}>
+            <TextInput label='RUT Propietario' value = {this.state.rut} onChangeText = {rut => this.setState({rut})} underlineColor = "#009688" style = {{backgroundColor:'#ffffff',marginBottom: 5}} error = {this.state.is_valid_rut}/>
             <TextInput label='Dirección' value = {this.state.address} onChangeText = {address => this.setState({address})} underlineColor = "#009688" style = {{backgroundColor:'#ffffff',marginBottom: 5}}/>
+            <Picker
+              selectedValue={this.state.region}
+              onValueChange={(itemValue, itemIndex) => this.setState({region: itemValue})} style = {{marginTop: 10}}>
+              <Picker.Item label = "Seleccione región" value ="0" />
+              <Picker.Item label="Región Metropolitana" value="santiago" />
+              <Picker.Item label="Valparaíso" value="valpo" />
+              </Picker>
+
+          </View>
+          <View style = {styles.containerForm}>
+            <Picker
+              selectedValue={this.state.raee}
+              onValueChange={(itemValue, itemIndex) => {this.setState({raee:itemValue}),this.getResiduos(itemIndex-1)}}>
+              <Picker.Item label = "Seleccione residuo" value ='' />
+              {this.state.raees.map((i, index) => (
+                <Picker.Item key = {index} label = {i.name} value = {i.name}/>
+              ))}
+            </Picker>
+            <Picker
+              selectedValue = {this.state.type_raee}
+              onValueChange = {(itemValue, itemIndex) => {this.setState({type_raee: itemValue}), this.getTypeDescRaee(itemIndex)}}>
+              <Picker.Item label = "Seleccione el tipo de residuo" value = '' />
+              {this.state.types_raee.map((i, index) => (
+                <Picker.Item key = {index} label = {i.name} value = {i.name} />
+              ))}
+            </Picker>
+          </View>
+          <View style = {styles.buttonPic}>
+            <Button icon = 'add-a-photo' mode = 'text' color = "#009688" onPress = {() => this.props.navigation.navigate('CameraView')}>Toma una foto</Button>
+          </View>
+          <View style = {styles.button}>
+            <Button icon="add" mode = "contained" color = "#009688" onPress = {this.getIDResidue}>Guardar</Button>
+          </View>
         </View>
-        <View style = {styles.containerForm}>
-          <Picker
-            selectedValue={this.state.raee}
-            onValueChange={(itemValue, itemIndex) => {this.setState({raee:itemValue}),this.getResiduos(itemIndex-1)}}>
-            <Picker.Item label = "Seleccione residuo" value ='' />
-            {this.state.raees.map((i, index) => (
-              <Picker.Item key = {index} label = {i.name} value = {i.name}/>
-            ))}
-          </Picker>
-          <Picker
-            selectedValue = {this.state.type_raee}
-            onValueChange = {(itemValue, itemIndex) => {this.setState({type_raee: itemValue}), this.getTypeDescRaee(itemIndex)}}>
-            <Picker.Item label = "Seleccione el tipo de residuo" value = '' />
-            {this.state.types_raee.map((i, index) => (
-              <Picker.Item key = {index} label = {i.name} value = {i.name} />
-            ))}
-          </Picker>
-          <TextInput label='Descripción' value = {this.state.desc}  onChangeText = {desc => this.setState({desc})} underlineColor = "#009688" numberOfLines = {2} style = {{backgroundColor:'#ffffff',marginBottom: 5}}/>
-        </View>
-        <View style = {styles.button}>
-          <Button icon="add" mode = "contained" color = "#009688" onPress = {this.getIDResidue}>Guardar</Button>
-        </View>
-      </View>
-    );
+      );
+    }
   }
-}
 
 
 const styles = StyleSheet.create({
@@ -225,6 +229,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 40
+  },
+  buttonPic:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
   },
   spinnerTextStyle: {
     color: '#009688'
