@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Picker, TouchableOpacity, Image } from 'react-n
 import { Button, TextInput, Appbar, Title } from 'react-native-paper';
 import AppBar from '../appbar/appbar';
 import Add from '../add/add';
+import QR from '../QR/Qr';
 // vista qr
 //vista centros de acopio
 import {createStackNavigato, createAppContainer} from 'react-navigation';
@@ -25,7 +26,7 @@ export default class HomeTransport extends Component{
             <Image source={require("../../assets/cart.png")} style = {styles.image} />
             <Text style = {{textAlign:'center'}}>Añadir Residuo</Text>
           </TouchableOpacity>
-          <TouchableOpacity style = {styles.button} onPress = {() => alert('no implementado aun')}>
+          <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('QR')}>
             <Image source={require("../../assets/qr.png")} style = {styles.image} />
             <Text style = {{textAlign:'center'}}>Escanear código</Text>
           </TouchableOpacity>

@@ -19,7 +19,7 @@ export default class login extends Component{
     email: '',
     input_password: '',
     testUsers: [
-      {user:'transportista', pass: '1234', type:1},
+      {user:'t', pass: '1234', type:1},
       {user:'adminCA', pass:'4321', type:2},
       {user:'admin', pass:'admin', type:3},
       {user:'worker', pass:'password', type:4},
