@@ -1,37 +1,39 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-import {Camera, Permissions, FileSystem} from 'expo';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
+import {Camera, Permissions, FileSystem, MediaLibrary} from 'expo';
+import {Button} from 'react-native-paper';
 
 export default class CameraView extends Component{
   static navigationOptions = {header:null};
-  constructor(props) {
-      super(props);
-      this.document_dir = FileSystem.documentDirectory; // the full path to where the photos should be saved (includes the trailing slash)
-      this.filename_prefix = 'increment_photo_'; // prefix all file names with this string
-    }
+
   state = {
     hasCameraPermission: null,
+    hasCameraRollGranted:null,
     type: Camera.Constants.Type.back,
+    newPhotos: false,
+    ratio:'16:9'
   };
 
-  snap = async() => {
+  snap = () => {
+    console.log("sadasdasd")
     if(this.camera){
-      let photo = await this.camera.takePictureAsync()
-      .then((data) => {
-        let datetime = getPathSafeDatetime();
-        let file_path = `${this.document_dir}${this.filename_prefix}${datetime}.jpg`;
-      })
+      this.camera.takePictureAsync({quality:1.0,base64:true,onPictureSaved:this.onPictureSaved});
     }
   }
 
-  getPathSafeDatetime() {
-     let datetime = getLocalDateTime(new Date()).replace(/\//g, '-').replace(',', '').replace(/:/g, '_').replace(/ /g, '+');
-     return datetime;
-   }
+  onPictureSaved = async photo => {
+    console.log(photo.base64)
+    const asset = await MediaLibrary.createAssetAsync(photo.uri);
+    MediaLibrary.createAlbumAsync('Ecopuntos',asset)
+    .then(() => {console.log("creado")})
+    .catch(err => {console.log('err'),err})
+    this.setState({newPhotos:true});
+  }
 
-  async componentDidMount() {
-     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-     this.setState({ hasCameraPermission: status === 'granted' });
+   async componentWillMount(){
+     const{status} = await Permissions.askAsync(Permissions.CAMERA);
+     const {status2} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+     this.setState({hasCameraPermission: status === 'granted'});
    }
 
    render() {
@@ -43,24 +45,21 @@ export default class CameraView extends Component{
      } else {
        return (
          <View style={{ flex: 1 }}>
-           <Camera style={{ flex: 1 }} type={this.state.type} ref = {ref => {this.camera = ref;}} >
+           <Camera style={{ flex: 1 }} ref={ref => {this.camera = ref;}} >
              <View
                style={{
                  flex: 1,
                  backgroundColor: 'transparent',
                  flexDirection: 'row',
+                 alignItems: 'center',
+                 justifyContent: 'space-evenly'
                }}>
                <TouchableOpacity
                  style={{
-                   flex: 0.1,
                    alignSelf: 'flex-end',
-                   alignItems: 'center',
                  }}
-                 onPress={() => this.snap}>
-                 <Text
-                   style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                   {' '}Flip{' '}
-                 </Text>
+                 onPress={this.snap}>
+                 <Image source = {require('../../assets/camera.png')} style= {{width: 48,height: 48, marginBottom: 20}}/>
                </TouchableOpacity>
              </View>
            </Camera>
