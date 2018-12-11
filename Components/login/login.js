@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderRadius: 30,
     width: '85%',
-    height: '18%',
+    height: '60%',
     backgroundColor: '#009688'
   },
   inputContainer:{

@@ -7,8 +7,9 @@ import Home from './Components/home/home';
 import Pieces from './Components/pieces/pieces';
 import Login from './Components/login/login';
 import HomeTransport from './Components/homeTransport/homeTransport';
-import CameraView from './Components/Camera/Camera'
-import QR from './Components/QR/Qr'
+import CameraView from './Components/Camera/Camera';
+import QrScanner from './Components/QrScanner/QrScanner';
+import QrGenerator from './Components/QrGenerator/QrGenerator';
 const RootStack = createStackNavigator(
   {
     Login : {screen:Login},
@@ -18,7 +19,8 @@ const RootStack = createStackNavigator(
     Pieces:{screen: Pieces},
     HomeTransport: {screen: HomeTransport},
     CameraView: {screen: CameraView},
-    QR: {screen: QR}
+    QrScanner: {screen: QrScanner},
+    QrGenerator: {screen: QrGenerator}
 
   },
   {

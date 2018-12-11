@@ -40,21 +40,21 @@ static navigationOptions = {header:null};
         {id: 0, name: 'Refrigerador', types: [{id_type:0, name: 'frigobar', value: "FRIG"},
         {id_type: 1, name: '1 puerta', value:'1PRT'},
         {id_type: 2, name: '2 puertas', value: '2PRT'},
-        {id_type: 3, name: 'side by side', value: 'SBYS'}]},
+        {id_type: 3, name: 'side by side', value: 'SBYS'}], value:'REF' },
         {id: 1, name: 'lavadora/secadora', types: [{id_type: 0, name: 'hasta 5 Kg', value: 'H5KG'},
         {id_type: 1, name: 'hasta 12 Kg', value:'H12Kg'},
-        {id_type: 2, name: 'Más de 12 Kg', value:'M12Kg'}]},
+        {id_type: 2, name: 'Mas de 12 Kg', value:'M12Kg'}], value:'LAV' },
         {id: 2, name: 'Cocina', types: [{id_type: 0, name: 'hasta 2 platos', value:'H2PL'},
         {id_type: 1, name: 'hasta 4 platos', value:'H4PL'},
-        {id_type: 2, name: 'Más de 4 platos', value:'M4PL'}]},
+        {id_type: 2, name: 'Mas de 4 platos', value:'M4PL'}], value: 'COC'},
         {id: 3, name: 'Aire acondicionado', types: [{id_type: 0, name: 'Portátil', value:'PORT'},
         {id_type: 1, name: 'Split muro cielo', value:'SPMC'},
-        {id_type: 2, name: 'Ventana', value:'VENT'}]},
-        {id: 4, name: 'Radiador', types: [{id_type: 0, name: 'Estándar', value:'ESTN'}]},
-        {id: 5, name: 'Máquina expendedora', types: [{id_type: 0, name: '1 m3', value:'1MCU'},
+        {id_type: 2, name: 'Ventana', value:'VENT'}], value: 'AIR'},
+        {id: 4, name: 'Radiador', types: [{id_type: 0, name: 'Estandar', value:'ESTN'}], value: 'RAD'},
+        {id: 5, name: 'Maquina expendedora', types: [{id_type: 0, name: '1 m3', value:'1MCU'},
         {id_type: 1, name: '2 m3', value:'2MCU'},
         {id_type: 2, name: '3 m3', value:'3MCU'},
-        {id_type: 3, name: '4 m3', value:'4MCU'}]}
+        {id_type: 3, name: '4 m3', value:'4MCU'}], value: 'MAQ'}
       ],
       types_raee: [{id_type:0,name:'',value:'aux'}]
       }
@@ -96,7 +96,17 @@ static navigationOptions = {header:null};
         cont+=1;
       }
     }
+    createUniqueCode(){
+      var raee = this.getState({raee});
+      var type_raee = this.getState({type_raee});
+      var today = new Date();
+      var day = today.getDate();
+      var month = today.getMonth();
+      var year = today.getFullYear();
 
+      //state.raees[0].types[2]
+      //Colocar switch con todas las posibles combinaciones
+    }
     validRut(){
       var aux_rut = this.state.rut;
       var amount = 0;
