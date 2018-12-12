@@ -6,6 +6,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import AppBar from '../appbar/appbar';
 import CameraView from '../Camera/Camera';
 import {createStackNavigato, createAppContainer} from 'react-navigation';
+import QRCode from 'react-native-qrcode';
 
 export default class add extends Component{
 static navigationOptions = {header:null};
@@ -34,27 +35,29 @@ static navigationOptions = {header:null};
       desc: '',
       subtitle_view: 'agregar producto',
       message: '',
+      visible: false,
+      text: "",
     //raees:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
     //types:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
       raees: [
         {id: 0, name: 'Refrigerador', types: [{id_type:0, name: 'frigobar', value: "FRIG"},
         {id_type: 1, name: '1 puerta', value:'1PRT'},
         {id_type: 2, name: '2 puertas', value: '2PRT'},
-        {id_type: 3, name: 'side by side', value: 'SBYS'}]},
+        {id_type: 3, name: 'side by side', value: 'SBYS'}], value:'REF' },
         {id: 1, name: 'lavadora/secadora', types: [{id_type: 0, name: 'hasta 5 Kg', value: 'H5KG'},
         {id_type: 1, name: 'hasta 12 Kg', value:'H12Kg'},
-        {id_type: 2, name: 'Más de 12 Kg', value:'M12Kg'}]},
+        {id_type: 2, name: 'Mas de 12 Kg', value:'M12Kg'}], value:'LAV' },
         {id: 2, name: 'Cocina', types: [{id_type: 0, name: 'hasta 2 platos', value:'H2PL'},
         {id_type: 1, name: 'hasta 4 platos', value:'H4PL'},
-        {id_type: 2, name: 'Más de 4 platos', value:'M4PL'}]},
+        {id_type: 2, name: 'Mas de 4 platos', value:'M4PL'}], value: 'COC'},
         {id: 3, name: 'Aire acondicionado', types: [{id_type: 0, name: 'Portátil', value:'PORT'},
         {id_type: 1, name: 'Split muro cielo', value:'SPMC'},
-        {id_type: 2, name: 'Ventana', value:'VENT'}]},
-        {id: 4, name: 'Radiador', types: [{id_type: 0, name: 'Estándar', value:'ESTN'}]},
-        {id: 5, name: 'Máquina expendedora', types: [{id_type: 0, name: '1 m3', value:'1MCU'},
+        {id_type: 2, name: 'Ventana', value:'VENT'}], value: 'AIR'},
+        {id: 4, name: 'Radiador', types: [{id_type: 0, name: 'Estandar', value:'ESTN'}], value: 'RAD'},
+        {id: 5, name: 'Maquina expendedora', types: [{id_type: 0, name: '1 m3', value:'1MCU'},
         {id_type: 1, name: '2 m3', value:'2MCU'},
         {id_type: 2, name: '3 m3', value:'3MCU'},
-        {id_type: 3, name: '4 m3', value:'4MCU'}]}
+        {id_type: 3, name: '4 m3', value:'4MCU'}], value: 'MAQ'}
       ],
       types_raee: [{id_type:0,name:'',value:'aux'}]
       }
@@ -96,7 +99,6 @@ static navigationOptions = {header:null};
         cont+=1;
       }
     }
-
     validRut(){
       var aux_rut = this.state.rut;
       var amount = 0;
@@ -116,8 +118,18 @@ static navigationOptions = {header:null};
     getIDResidue(){
       var currentDate = new Date();
       var aux_random = Math.floor((Math.random()*100) + 1);
-      var string_location = this.state.location.coords.latitude+","+this.state.location.coords.longitude;
-      var aux_id_residue = (this.state.raee[0]+this.state.raee[1]+this.state.raee[2]).toUpperCase() + this.state.type_desc_raee + currentDate.getDate()+ currentDate.getMonth()+currentDate.getFullYear()+aux_random.toString();
+      try
+      {
+        var string_location = this.state.location.coords.latitude+","+this.state.location.coords.longitude;
+        var aux_id_residue = (this.state.raee[0]+this.state.raee[1]+this.state.raee[2]).toUpperCase() + this.state.type_desc_raee + currentDate.getDate()+ currentDate.getMonth()+currentDate.getFullYear()+aux_random.toString();
+        alert(aux_id_residue)
+      }
+      catch(err)
+      {
+        alert("Todos los datos deben ser rellenados")
+      }
+
+      this.setState({text:aux_id_residue});
       console.log(aux_id_residue);
       if(!this.validRut()){
           this.setState({is_valid_rut: true});
@@ -142,7 +154,10 @@ static navigationOptions = {header:null};
             })
           }).then((response) => {
                   if(response.status === 200)
+                  {
+                    alert("codigo generado: " + aux_id_residue);
                     this.setState({spinner: false, message: 'El producto fue agregado exitosamente'}, () => this._showDialog());
+                  }
                   else
                     this.setState({spinner: false, message: 'El producto no pudo ser agregado'}, () => this._showDialog());
                 })
@@ -208,6 +223,14 @@ static navigationOptions = {header:null};
           <View style = {styles.button}>
             <Button icon="add" mode = "contained" color = "#009688" onPress = {this.getIDResidue}>Guardar</Button>
           </View>
+        <View style={{flex:1, justifyContent:"center", alignItems:"center", marginTop:15}}>
+          <QRCode
+
+          value={this.state.text}
+          size={120}
+          bgColor='black'
+          fgColor='white'/>
+        </View>
         </View>
       );
     }
