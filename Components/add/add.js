@@ -6,6 +6,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import AppBar from '../appbar/appbar';
 import CameraView from '../Camera/Camera';
 import {createStackNavigato, createAppContainer} from 'react-navigation';
+import QRCode from 'react-native-qrcode';
 
 export default class add extends Component{
 static navigationOptions = {header:null};
@@ -34,6 +35,8 @@ static navigationOptions = {header:null};
       desc: '',
       subtitle_view: 'agregar producto',
       message: '',
+      visible: false,
+      text: "",
     //raees:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
     //types:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
       raees: [
@@ -96,17 +99,6 @@ static navigationOptions = {header:null};
         cont+=1;
       }
     }
-    createUniqueCode(){
-      var raee = this.getState({raee});
-      var type_raee = this.getState({type_raee});
-      var today = new Date();
-      var day = today.getDate();
-      var month = today.getMonth();
-      var year = today.getFullYear();
-
-      //state.raees[0].types[2]
-      //Colocar switch con todas las posibles combinaciones
-    }
     validRut(){
       var aux_rut = this.state.rut;
       var amount = 0;
@@ -126,8 +118,18 @@ static navigationOptions = {header:null};
     getIDResidue(){
       var currentDate = new Date();
       var aux_random = Math.floor((Math.random()*100) + 1);
-      var string_location = this.state.location.coords.latitude+","+this.state.location.coords.longitude;
-      var aux_id_residue = (this.state.raee[0]+this.state.raee[1]+this.state.raee[2]).toUpperCase() + this.state.type_desc_raee + currentDate.getDate()+ currentDate.getMonth()+currentDate.getFullYear()+aux_random.toString();
+      try
+      {
+        var string_location = this.state.location.coords.latitude+","+this.state.location.coords.longitude;
+        var aux_id_residue = (this.state.raee[0]+this.state.raee[1]+this.state.raee[2]).toUpperCase() + this.state.type_desc_raee + currentDate.getDate()+ currentDate.getMonth()+currentDate.getFullYear()+aux_random.toString();
+        alert(aux_id_residue)
+      }
+      catch(err)
+      {
+        alert("Todos los datos deben ser rellenados")
+      }
+
+      this.setState({text:aux_id_residue});
       console.log(aux_id_residue);
       if(!this.validRut()){
           this.setState({is_valid_rut: true});
@@ -152,7 +154,10 @@ static navigationOptions = {header:null};
             })
           }).then((response) => {
                   if(response.status === 200)
+                  {
+                    alert("codigo generado: " + aux_id_residue);
                     this.setState({spinner: false, message: 'El producto fue agregado exitosamente'}, () => this._showDialog());
+                  }
                   else
                     this.setState({spinner: false, message: 'El producto no pudo ser agregado'}, () => this._showDialog());
                 })
@@ -218,6 +223,14 @@ static navigationOptions = {header:null};
           <View style = {styles.button}>
             <Button icon="add" mode = "contained" color = "#009688" onPress = {this.getIDResidue}>Guardar</Button>
           </View>
+        <View style={{flex:1, justifyContent:"center", alignItems:"center", marginTop:15}}>
+          <QRCode
+
+          value={this.state.text}
+          size={120}
+          bgColor='black'
+          fgColor='white'/>
+        </View>
         </View>
       );
     }

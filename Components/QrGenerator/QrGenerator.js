@@ -1,6 +1,6 @@
 'use strict';
  
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import QRCode from 'react-native-qrcode';
  
 import {
@@ -29,7 +29,7 @@ class HelloWorld extends Component {
           size={200}
           bgColor='black'
           fgColor='white'/>
-      </View>
+        </View>
     );
   };
 }

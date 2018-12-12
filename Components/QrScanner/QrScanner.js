@@ -32,6 +32,7 @@ export default class QrScanner extends React.Component {
   }
 
   _handleBarCodeRead = ({ type, data }) => {
-    alert(`Actualizado estado del residuo con código ${data}.`);
+    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   }
 }
+
