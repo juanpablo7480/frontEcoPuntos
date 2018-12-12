@@ -1,5 +1,5 @@
 'use strict';
- 
+
 import React, { Component } from 'react';
 import QRCode from 'react-native-qrcode';
  

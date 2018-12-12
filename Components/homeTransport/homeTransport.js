@@ -28,17 +28,13 @@ export default class HomeTransport extends Component{
           </TouchableOpacity>
           <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('QrScanner')}>
             <Image source={require("../../assets/qr.png")} style = {styles.image} />
-            <Text style = {{textAlign:'center'}}>Escanear código</Text>
+            <Text style = {{textAlign:'center'}}>Consultar código</Text>
           </TouchableOpacity>
         </View>
         <View style = {styles.actions}>
           <TouchableOpacity style = {styles.button} onPress = {() => {alert("No implementado")}}>
             <Image source = {require("../../assets/placeholder.png")} style = {styles.image} />
             <Text style = {{textAlign: 'center'}}>Centros de acopio</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('QrGenerator')}>
-            <Image source = {require("../../assets/qr.png")} style = {styles.image} />
-            <Text style = {{textAlign: 'center'}}>Crear Código QR</Text>
           </TouchableOpacity>
         </View>
       </View>

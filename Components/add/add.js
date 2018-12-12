@@ -37,6 +37,16 @@ static navigationOptions = {header:null};
       message: '',
       visible: false,
       text: "",
+      nombre: "",
+      nombre_transportista: "",
+      fecha_nac: "",
+      fecha: "",
+      marca: "",
+      tipo_producto: "",
+      subtipo: "",
+      foto_placa:"",
+      modelo:"",
+      info_adicional:"",
     //raees:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
     //types:[{id:'',name:''}] para array de json para cargar desde bd para que no sea estatico
       raees: [
@@ -118,6 +128,30 @@ static navigationOptions = {header:null};
     getIDResidue(){
       var currentDate = new Date();
       var aux_random = Math.floor((Math.random()*100) + 1);
+      var rut_transportista = this.state.rut_transportista;
+      var patente_transportista = this.state.patente_transportista;
+      var address = this.state.address;
+      var region = this.state.region;
+      var raee = this.state.raee;
+      var type_raee = this.state.type_raee;
+      var type_desc_raee = this.state.type_desc_raee;
+      var desc = this.state.desc;
+      var subtitle_view = this.state.subtitle_view;
+      var message = this.state.message;
+      var visible = this.state.visible;
+      var text = this.state.text;
+      var nombre = this.state.nombre;
+      var nombre_transportista = this.state.nombre_transportista;
+      var fecha_nac = this.state.fecha_nac;
+      var fecha = this.state.fecha;
+      var marca = this.state.marca;
+      var tipo_producto = this.state.tipo_producto;
+      var subtipo = this.state.subtipo;
+      var foto_placa = this.state.foto_placa;
+      var modelo = this.state.modelo;
+      var info_adicional = this.state.info_adicional;
+      var rut = this.state.rut;
+      var empresa = this.state.empresa;
       try
       {
         var string_location = this.state.location.coords.latitude+","+this.state.location.coords.longitude;
@@ -144,13 +178,14 @@ static navigationOptions = {header:null};
               'Content-Type': 'application/json',
             },
             body:JSON.stringify({
-                'code':aux_id_residue,
+                'id_sensor':"",                
                 'estados':[{'paso':'En camino a centro de acopio','gps':string_location}],
+                'producto':[{'code':aux_id_residue, 'marca':marca, 'tipo_producto':tipo_producto, 'subtipo':subtipo, 'foto_placa':foto_placa, 'modelo':modelo, 'info_adicional':info_adicional}],
                 'final':false,
-                'owner':'03d6071478e0173e356d7011c5ed245fbe27967d3fb126e7d588fa1641bbd87530',
+                'owner':[{'rut':rut,'nombre_completo':nombre,'edad':"", 'genero':"", 'direccion_retiro':address,'fecha_nac':""}],
                 'raws':[],
-                'residuo':this.state.raee,
-                'rut':this.state.rut
+                'receptor':[{'rut':rut_transportista, 'nombre':nombre, 'empresa':empresa, 'fecha_recepcion':fecha}],
+                'residuo':this.state.raee
             })
           }).then((response) => {
                   if(response.status === 200)
@@ -162,7 +197,6 @@ static navigationOptions = {header:null};
                     this.setState({spinner: false, message: 'El producto no pudo ser agregado'}, () => this._showDialog());
                 })
       }
-
     }
 
   render(){
@@ -193,9 +227,9 @@ static navigationOptions = {header:null};
             <Picker
               selectedValue={this.state.region}
               onValueChange={(itemValue, itemIndex) => this.setState({region: itemValue})} style = {{marginTop: 10}}>
-              <Picker.Item label = "Seleccione región" value ="0" />
-              <Picker.Item label="Región Metropolitana" value="santiago" />
-              <Picker.Item label="Valparaíso" value="valpo" />
+              <Picker.Item label="Seleccione región" value ="0" />
+              <Picker.Item label="Región Metropolitana" value="Santiago" />
+              <Picker.Item label="Valparaíso" value="Valparaíso" />
               </Picker>
 
           </View>

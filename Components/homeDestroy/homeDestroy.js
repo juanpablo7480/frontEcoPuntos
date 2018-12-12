@@ -1,55 +1,40 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity, Image } from 'react-native';
 import { Button, TextInput, Appbar, Title } from 'react-native-paper';
 import AppBar from '../appbar/appbar';
 import Add from '../add/add';
-import UpdateStatus from '../updateStatus/updateStatus';
-import Pieces from '../pieces/pieces';
+import QrScanner from '../QrScanner/QrScanner';
+// vista qr
+//vista centros de acopio
 import {createStackNavigato, createAppContainer} from 'react-navigation';
 
-export default class Home extends Component {
-  state={
-    subtitle_view: 'SuperAdmin'
+export default class HomeDestroy extends Component{
+  state = {
+    subtitle_view: 'Operador Planta de Reciclaje'
   }
   static navigationOptions = {header:null};
-  render() {
-    return (
+
+  render(){
+    return(
       <View style = {styles.container}>
         <AppBar subtitle_view = {this.state.subtitle_view}></AppBar>
         <View style = {styles.helper}>
         </View>
         <Title style = {styles.title}>¿Qué desea hacer?</Title>
         <View style = {styles.actions}>
-          <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('Add')}>
-            <Image source={require("../../assets/cart.png")} style = {styles.image} />
-            <Text style = {{textAlign:'center'}}>Añadir Residuo</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('UpdateStatusQr')}>
-            <Image source={require("../../assets/refresh.png")} style = {styles.image} />
-            <Text style = {{textAlign:'center'}}>Actualizar estado</Text>
-          </TouchableOpacity>
-        </View>
-        <View style = {styles.actions}>
-          <TouchableOpacity style = {styles.button} onPress = {() => {alert("No implementado")}}>
-            <Image source = {require("../../assets/placeholder.png")} style = {styles.image} />
-            <Text style = {{textAlign: 'center'}}>centros de acopio</Text>
-          </TouchableOpacity>
           <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('Pieces')}>
             <Image source = {require("../../assets/recycle-bin.png")} style = {styles.image} />
             <Text style = {{textAlign: 'center'}}>Partes</Text>
           </TouchableOpacity>
-        </View>
-        <View style = {styles.actions}>
           <TouchableOpacity style = {styles.button} onPress = {() => this.props.navigation.navigate('QrScanner')}>
             <Image source={require("../../assets/qr.png")} style = {styles.image} />
             <Text style = {{textAlign:'center'}}>Consultar código</Text>
           </TouchableOpacity>
         </View>
       </View>
-    );
+    )
   }
 }
-
 
 const styles = StyleSheet.create({
   title:{

@@ -19,10 +19,11 @@ export default class login extends Component{
     email: '',
     input_password: '',
     testUsers: [
-      {user:'t', pass: '1234', type:1},
-      {user:'adminCA', pass:'4321', type:2},
-      {user:'admin', pass:'admin', type:3},
-      {user:'worker', pass:'password', type:4},
+      {user:'a', pass:'a', type:1},
+      {user:'b', pass:'b', type:2},
+      {user:'c', pass:'c', type:3},
+      {user:'d', pass:'d', type:4},
+      {user:'administrador', pass:'admin', type:5},
       {user:'administrador', pass:'admin', type:5}
     ],
     loginText: 'Ingresar',
@@ -45,11 +46,14 @@ export default class login extends Component{
       var res = this.login(this.state.email, this.state.input_password)
       if(res > 0){
         if (res === 1)
-          this.props.navigation.navigate('HomeTransport');
-        else if(res >= 2)
           this.props.navigation.navigate('Home');
+        else if(res === 2)
+          this.props.navigation.navigate('HomeTransport');
+        else if(res === 3)
+          this.props.navigation.navigate('HomeWorker');
+        else if(res === 4)
+          this.props.navigation.navigate('HomeDestroy');
       }
-
       else{
         this.setState({loading:false, loginText:'Ingresar'}, ()=> {
             alert('Usuario no registrado');
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderRadius: 30,
     width: '85%',
-    height: '60%',
+    height: '18%',
     backgroundColor: '#009688'
   },
   inputContainer:{
